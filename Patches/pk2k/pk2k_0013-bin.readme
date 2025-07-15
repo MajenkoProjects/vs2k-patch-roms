@@ -1,0 +1,132 @@
+wjm 02-apr-1999: PK2KDRVR & assorted patches to system programs, V1.3
+
+Changes over V1.2: Support non-zero SCSI host id (like Vs3100).
+
+	*** This is for VMS V5.5-2 only ***
+
+PK2KDRVR is a driver for the Vs2000/uVAX2000 SCSI port
+(traditionally known as the "tape controller port").
+
+	>>> EXPERIMENTAL software, NO WARRANTIES at all! <<<
+
+Apart from one `feature' and one restriction mentioned next, 
+it _ought_ to behave just like the Vs3100 SCSI driver (PKNDRIVER).
+
+SCSI host id determination:
+	The SCSI host adapter _by_default_ used the SCSI id 0
+	(not 6 or 7, as customary with other SCSI adapters), 
+	meaning you can't use a device on the bus with this id. 
+	This setting can be checked from the ">>> T 50" display, 
+	which under "TPC" shows a longword for each of the SCSI ids 
+	0..7 - the host id is indicated by a longword of FFFFFF03. 
+	Analogous to the ">>> SET SCSI[A]" commands found with other 
+	VAXen, the setting can be changed permanently (saved in NVRAM), 
+	in a somewhat non-intuitive way:
+
+	For a host id of ...	enter at the >>> prompt ...
+		7		D/U/P 200B00BC 1C
+		6		D/U/P 200B00BC 18
+		5		D/U/P 200B00BC 14
+		4		D/U/P 200B00BC 10
+		3		D/U/P 200B00BC 0C
+		2		D/U/P 200B00BC 08
+		1		D/U/P 200B00BC 04
+		0		D/U/P 200B00BC 00
+
+	Note: The `field sevice utility' ">>> T 73" (or better, 
+	      ">>> T 20000073"), aka. "tpmker", does not correctly 
+	      cope with a non-zero host id. This is a ROM bug. 
+	      T 73 likely has little use to anyone these days.
+
+Known restriction:
+	PK2KDRVR won't do data transfers of 16kB or more.
+
+	This has the effect of limiting the block size
+	that can be used with SCSI tapes, and also will
+	break any program that _attempts_ to read 16kB or more.
+	The only VMS program that does so (which I'm aware of)
+	is DUMP - see below for a patch.
+
+
+Disclaimer:
+	This is *EXPERIMENTAL* SOFTWARE that theoretically
+	*could* not only crash your system, but *could* cause
+	CORRUPTION on all media connected to the computer on 
+	which it's installed. (In fact, PK2KDRVR has plenty 
+	of code that *attempts* to crash the system if a chance 
+	for corruption gets noticed. I haven't observed any problem,
+	let alone a crash, with PK2K on VMS V5.5-2, since the release 
+        of V1.2 in late August 1997, in spite of trying pretty hard :-)
+	Fact is, the Vs2000/uVAX2000 hardware has never been 
+	"qualified" by anyone to work correctly with SCSI devices. 
+
+	>>> NO WARRANTIES at all! <<<
+
+
+Installation & use:
+
+	*** This is for VMS V5.5-2 only ***
+
+	The "binary kit" contains PK2KDRVR.EXE (not spelled PK2KDRIVER
+	for quite "technical" reasons) plus 5 patch command files.
+
+	Place PK2KDRVR.EXE in SYS$LOADABLE_IMAGES.
+
+	Use
+		$ PATCH @2KSYSGEN.COM
+	to create 2KSYSGEN.EXE in the current directory.
+
+	>>> Make sure that no MUA0 shows up, and that TVDRIVER
+	>>> (the Vs2000/uVAX2000 magtape driver) is _not_ loaded.
+
+	Use
+		$ MCR [dir]2KSYSGEN AUTOCONFIGURE ALL
+	to load PK2KDRVR (ought to show up as device PKA0)
+	and autoconfigure the SCSI devices, just like on a Vs3100.
+
+	If you're confident enough in the driver that you want
+	the machine to auto-configure the SCSI at boot time,
+	create two more programs (which _may_ only be required
+	if the machine is a cluster member),
+
+		2KSTACONFIG.EXE via $ PATCH @2KSTACONFIG.COM
+	plus	2KCONFIGURE.EXE via $ PATCH @2KCONFIGURE.COM
+
+	and copy
+		2KSYSGEN.EXE to SYS$SYSTEM:SYSGEN.EXE
+		2KSTACONFIG.EXE to SYS$SYSTEM:STACONFIG.EXE
+		2KCONFIGURE.EXE to SYS$SYSTEM:CONFIGURE.EXE
+
+	Each of these programs supposedly behaves just like
+	the VMS "original", when executed on a VAX other than
+	a Vs2000 or uVAX2000.
+
+
+	For completeness' sake, there are two more patch command
+	files that create PK2K-aware versions of STASYSGEN.EXE and
+	STANDCONF.EXE . Both of these are only used by stand-alone
+	BACKUP - in order to build a PK2K-aware kit, place the
+	patched programs into SYS$SYSTEM under the original name,
+	and modify SYS$UPDATE:STABACKIT-TABLE.DAT by replacing
+	"TVDRIVER.EXE" with "PK2KDRVR.EXE". You may also wish to
+	change STABACKIT.COM such that it accepts generic SCSI tape
+	(devtype 28) and on that occasion make it refer to a differently
+	named *-TABLE.DAT - I did find a non-DEC DAT drive from which
+	a Vs2000 did boot, with the tape configured as MKA100 
+	(">>> B MUA0" expects the tape to have a SCSI id of 1).
+
+
+	Lastly, there's 2KDUMP.COM which will create 2KDUMP.EXE
+	via	$ PATCH @2KDUMP.COM
+
+	Use the result instead of the original SYS$SYSTEM:DUMP.EXE
+	in order to DUMP blocks from a SCSI tape drive, e.g. via
+
+		$ DEFINE/USER DUMP dev:[dir]2KDUMP.EXE
+		$ DUMP MKAu00:
+
+	or similar. Contrary to standard DUMP, 2KDUMP will - independent of
+	hardware - read at most 16k-1 bytes per tape block (no big deal :-).
+
+
+Wolfgang J. Möller, Göttingen, F.R.Germany	<moeller@gwdg.de>
