@@ -9,12 +9,12 @@ external hard drive - both of the MFM variety. That's not a big amount of
 storage, and old MFM drives are as you probably know prone to stiction and
 bad blocks, if they even work at all. 
 
-The VAXstation 200 does have a SCSI interface, however it was only intended
+The VAXstation 2000 does have a SCSI interface, however it was only intended
 to be used with the optional external TZK50 tape drive, and as such has never
 had any real support for adding hard drives, and it certainly cannot boot
 from a SCSI hard drive even if the operating system supported accessing one.
 
-But all is not lost. An experimental patch set for the VAXstation 200 was
+But all is not lost. An experimental patch set for the VAXstation 2000 was
 created (but never officially released) to add full SCSI support to both the
 internal ROMs and to VAX/VMS, but only one specific version. Which is what
 we have here.
