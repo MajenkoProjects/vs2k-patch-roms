@@ -66,7 +66,7 @@ Now the long version:
 Installing the ROMs is pretty straight forward. There's 4 EPROM chips on the motherboard
 which need replacing.
 
-{image here}
+![ROMPlacement](https://github.com/user-attachments/assets/eb0417ef-58f3-4042-aaf1-6d31a02361bb)
 
 Note the order, as marked on these ROMs.
 
