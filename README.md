@@ -89,3 +89,27 @@ to separate those two signals. This needs some careful SMD rework.
 
 This modification uses one of the pins that was used for I2C for the SEL pin, so you will
 no longer be able to use the I2C connector on the BlueSCSI.
+
+For the curious
+---------------
+
+If you're curious about the steps needed to create the patched VMS images, here's what
+we had to do:
+
+1. Create a VAX/VMS 5.5-2 cluster using a SIMH emulated server.
+2. Enrol the target VAXstation 2000 into the cluster as a member.
+3. Patch the system using the original patch set
+4. Verify that SCSI is working and create two blank images on the BlueSCSI (id 2 and 3).
+5. Create a standalone backup kit on DKA300
+6. Copy the VAX/VMS-5.5-2 installation backup files onto DKA300
+7. Copy the SCSI patches to DKA300
+8. Boot from DKA300 and install the VAX/VMS base system to DKA200
+9. Reboot from the network and manually copy the patched files to the
+   correct places on DKA200
+
+As you can see it's not a simple operation.
+
+One last word
+-------------
+
+Good luck!
