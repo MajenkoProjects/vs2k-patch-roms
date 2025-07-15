@@ -87,6 +87,8 @@ to separate those two signals. This needs some careful SMD rework.
    gives the MCU direct control over the SEL pin.
 3. Install modified firmware into the Pi Pico which moves the SEL functionality to
    GPIO 17.
+   
+<img width="466" height="211" alt="BlueSCSIPatch" src="https://github.com/user-attachments/assets/802cbc62-8243-49b3-af2c-86bdc8daa508" />
 
 This modification uses one of the pins that was used for I2C for the SEL pin, so you will
 no longer be able to use the I2C connector on the BlueSCSI.
