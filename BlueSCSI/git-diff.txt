@@ -1,0 +1,21 @@
+index 39738ceb..3340ff93 100644
+--- a/lib/BlueSCSI_platform_RP2040/BlueSCSI_platform_gpio.h
++++ b/lib/BlueSCSI_platform_RP2040/BlueSCSI_platform_gpio.h
+@@ -39,7 +39,7 @@
+ #define SCSI_OUT_MSG  20
+ #define SCSI_IN_BSY  20
+
+-#define SCSI_IN_RST  21
++#define SCSI_IN_RST  17
+ #define SCSI_OUT_RST  22  // No RST pin, manual or expander only
+
+ #define SCSI_IN_ACK  26
+@@ -85,7 +85,7 @@
+
+ // IO expander I2C
+ #define GPIO_I2C_SDA 16
+-#define GPIO_I2C_SCL 17
++#define GPIO_I2C_SCL 16
+
+ // Other pins
+ #define SWO_PIN 16
