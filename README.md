@@ -37,7 +37,7 @@ Using it
 In short:
 
 1. You need to upgrade your ROMs using the four ROM images (b1-b4) in the ROMs
-   directory. You will need four new 64kB EPROMs to burn the images to then
+   directory. You will need four new 64kB EPROMs (27512, 27C512, etc) to burn the images to then
    replace the ROMs on your VAXstation 2000's motherboard.
 
 2. Connect the BlueSCSI to the SCSI bus (important: see belo), making sure to enable termination if
