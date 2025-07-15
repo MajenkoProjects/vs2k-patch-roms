@@ -81,8 +81,9 @@ low, which shouldn't happen. Most things don't care - but the VAXstation does, a
 happens it just gives up trying to do anything on the SCSI bus ever again.  So we need
 to separate those two signals. This needs some careful SMD rework.
 
-1. Remove the resistor R61. This is the resistor that ties the two signals together.
-2. Connect the left hand pad of R61 to the pin GPIO17 of the Raspberry Pi Pico. This
+1. Remove the resistor R66. This is the resistor that ties the two signals together.
+2. Connect the left hand pad (while the text of R66 is in the normal orientation)
+   of R66 to the pin GPIO17 of the Raspberry Pi Pico. This
    gives the MCU direct control over the SEL pin.
 3. Install modified firmware into the Pi Pico which moves the SEL functionality to
    GPIO 17.
