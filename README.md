@@ -123,3 +123,8 @@ Postscript
 The patches do not calculate the checksum for the ROMs. This means you will get the VAXstation
 failiing at bootup with an error 5?? with `SYS 0000.0002`. Work is going on to rectify this, including
 reverse engineering of the checksum algorithm and the system test 5 to work out what is needed. Watch this space.
+
+## Update:
+
+The ROMs have now been updated with the correct checksums. It turns out the checksum is calculated per physical ROM,
+and is a simple rotate-left-and-add method. I wrote a [little program](https://github.com/MajenkoProjects/vaxcheck) to calculate the checksums for me.
